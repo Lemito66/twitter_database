@@ -42,3 +42,32 @@ from tweets
 inner join users on users.user_id = tweets.user_id
 group by users.user_id
 ORDER by 'Tweets' DESC
+
+-- Tabla Likes
+CREATE TABLE likes (
+    user_id INT NOT NULL,
+    tweet_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (tweet_id) REFERENCES tweets(tweet_id),
+    PRIMARY KEY (user_id, tweet_id)
+);
+
+--Obtener el numero de likes por tweet	
+select tweet_id, COUNT(user_id) 'Likes'
+from likes
+group by tweet_id
+ORDER by 'Likes' DESC
+
+-- Con join para ver el nombre del usuario
+select tweets.tweet_id, users.first_name 'Nombre Usuario', COUNT(likes.user_id) 'Likes'
+from likes
+inner join tweets on tweets.tweet_id = likes.tweet_id
+inner join users on users.user_id = tweets.user_id
+group by tweets.tweet_id
+ORDER by 'Likes' DESC
+
+
+-- Añadir una columna a la tabla users
+ALTER TABLE users ADD COLUMN follower_count INT not null DEFAULT 0;
+
+
