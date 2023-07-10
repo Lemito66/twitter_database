@@ -71,3 +71,28 @@ ORDER by 'Likes' DESC
 ALTER TABLE users ADD COLUMN follower_count INT not null DEFAULT 0;
 
 
+-- Triggers 
+-- Trigger para actualizar el follower_count de la tabla users
+-- El Delimiter es para que no se ejecute el trigger hasta que no se termine de escribir
+Delimiter $$ 
+CREATE TRIGGER increase_follower_count
+AFTER INSERT ON followers
+FOR EACH ROW
+Begin
+    UPDATE users
+    SET follower_count = follower_count + 1
+    WHERE user_id = NEW.following_id;
+END $$
+Delimiter ;
+
+-- Para menorar el número de followers
+DELIMITER $$
+CREATE TRIGGER decrease_follower_count
+AFTER DELETE ON followers
+FOR EACH ROW
+BEGIN
+    UPDATE users
+    SET follower_count = follower_count - 1
+    WHERE user_id = OLD.following_id;
+END $$
+DELIMITER ;
