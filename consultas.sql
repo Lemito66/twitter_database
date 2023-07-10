@@ -29,3 +29,16 @@ CREATE TABLE tweets (
 );
 
 insert into tweets (user_id, tweet_text) values (1, 'Hola Mundo'), (2, 'Lemito el mejor'), (3, 'Saliendo'), (1, 'Estudiando'), (2, 'Aprendiendo'), (3, 'Dormir');
+
+-- Cuantos twwets tiene cada usuario
+select user_id, COUNT(tweet_id) 'Tweets'
+from tweets
+group by user_id
+ORDER by 'Tweets' DESC
+
+-- Ahora con un join para ver el nombre del usuario 
+select  users.first_name 'Nombre Usuario', COUNT(tweet_id) 'Tweets'
+from tweets
+inner join users on users.user_id = tweets.user_id
+group by users.user_id
+ORDER by 'Tweets' DESC
